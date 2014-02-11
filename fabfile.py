@@ -4,7 +4,7 @@ from presenters import NAME, VERSION
 name = NAME + VERSION
 archive_name = name + '.zip'
 
-f.env.hosts = ['pierre3@beytiskimu.net']
+f.env.hosts = ['pierre3@host.host']
 
 def build_exe():
 	f.local('pyinstaller pyinstaller.spec')

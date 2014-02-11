@@ -1,7 +1,4 @@
 import wx
-from wx.lib.pubsub import setupkwargs
-from wx.lib.pubsub import pub
-
 
 class Config(wx.Config):
 
@@ -9,9 +6,8 @@ class Config(wx.Config):
         app = app or 'BoardTrain2'
         wx.Config.__init__(self, app)
 
-        self.db_path = self.Read('db_path', 'data/UTL5_data.mdb')
-        self.bt_path = self.Read('bt_path', 
-                'C:/Users/Admin/Documents/utl/BoardTrain2/test')
+        self.db_path = self.Read('db_path', 'test/data/UTL5_data.mdb')
+        self.bt_path = self.Read('bt_path', 'test/data/BoardTrain')
         self.list_shops = self.Read('list_shops', 'Bricklane,Battersea').split(',')
         self.default_shop = self.Read('default_shop', 'Bricklane')
         self.show_rollovers = self.ReadBool('show_rollovers', False)
