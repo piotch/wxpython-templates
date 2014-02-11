@@ -19,7 +19,7 @@ class Config(wx.Config):
         self.merger6_path = self.Read('merger6_path', '')
 
 
-class ConfigEditor(wx.MiniFrame):
+class ConfigView(wx.MiniFrame):
 
     def __init__(self, parent):
         wx.MiniFrame.__init__(self, parent, -1,
@@ -40,20 +40,15 @@ class ConfigEditor(wx.MiniFrame):
         lbl_merger5_path = wx.StaticText(panel, label = 'Merger5 path')
         lbl_merger6_path = wx.StaticText(panel, label = 'Merger6 path')
 
-        self.txt_db_path = wx.TextCtrl(panel, style = wx.TE_READONLY)
-        self.txt_bt_path = wx.TextCtrl(panel, style = wx.TE_READONLY)
+        self.txt_db_path = wx.FilePickerCtrl(panel, style = wx.FLP_USE_TEXTCTRL)
+        self.txt_bt_path = wx.DirPickerCtrl(panel, style = wx.DIRP_USE_TEXTCTRL)
         self.txt_list_shops = wx.TextCtrl(panel)
         self.txt_default_shop = wx.TextCtrl(panel)
         self.chk_show_rollovers = wx.CheckBox(panel)
-        self.txt_previewer_path = wx.TextCtrl(panel, style = wx.TE_READONLY)
-        self.txt_merger5_path = wx.TextCtrl(panel, style = wx.TE_READONLY)
-        self.txt_merger6_path = wx.TextCtrl(panel, style = wx.TE_READONLY)
+        self.txt_previewer_path = wx.FilePickerCtrl(panel, style = wx.FLP_USE_TEXTCTRL)
+        self.txt_merger5_path = wx.FilePickerCtrl(panel, style = wx.FLP_USE_TEXTCTRL)
+        self.txt_merger6_path = wx.FilePickerCtrl(panel, style = wx.FLP_USE_TEXTCTRL)
 
-        self.btn_browse_db = wx.Button(panel, label = 'Choose...')
-        self.btn_browse_bt = wx.Button(panel, label = 'Choose...')
-        self.btn_browse_pre = wx.Button(panel, label = 'Choose...')
-        self.btn_browse_m5= wx.Button(panel, label = 'Choose...')
-        self.btn_browse_m6 = wx.Button(panel, label = 'Choose...')
         self.btn_save = wx.Button(panel, label = 'Save and Quit')
 
         sizer = wx.GridBagSizer(10, 3)
@@ -68,18 +63,12 @@ class ConfigEditor(wx.MiniFrame):
         sizer.Add(self.txt_db_path,
                 pos = (1,1),
                 flag=wx.TOP|wx.LEFT|wx.BOTTOM|wx.EXPAND, border=5)
-        sizer.Add(self.btn_browse_db,
-                pos = (1,2),
-                flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=5)
         sizer.Add(lbl_bt_path,
                 pos = (2,0),
                 flag=wx.TOP|wx.LEFT|wx.BOTTOM|wx.ALIGN_RIGHT, border=5)
         sizer.Add(self.txt_bt_path,
                 pos = (2,1),
                 flag=wx.TOP|wx.LEFT|wx.BOTTOM|wx.EXPAND, border=5)
-        sizer.Add(self.btn_browse_bt,
-                pos = (2,2),
-                flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=5)
         sizer.Add(lbl_list_shops,
                 pos = (3,0),
                 flag=wx.TOP|wx.LEFT|wx.BOTTOM|wx.ALIGN_RIGHT, border=5)
@@ -107,27 +96,18 @@ class ConfigEditor(wx.MiniFrame):
         sizer.Add(self.txt_previewer_path,
                 pos = (7,1),
                 flag=wx.TOP|wx.LEFT|wx.BOTTOM|wx.EXPAND, border=5)
-        sizer.Add(self.btn_browse_pre,
-                pos = (7,2),
-                flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=5)
         sizer.Add(lbl_merger5_path,
                 pos = (8,0),
                 flag=wx.TOP|wx.LEFT|wx.BOTTOM|wx.ALIGN_RIGHT|wx.ALIGN_RIGHT, border=5)
         sizer.Add(self.txt_merger5_path,
                 pos = (8,1),
                 flag=wx.TOP|wx.LEFT|wx.BOTTOM|wx.EXPAND, border=5)
-        sizer.Add(self.btn_browse_m5,
-                pos = (8,2),
-                flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=5)
         sizer.Add(lbl_merger6_path,
                 pos = (9,0),
                 flag=wx.TOP|wx.LEFT|wx.BOTTOM|wx.ALIGN_RIGHT, border=5)
         sizer.Add(self.txt_merger6_path,
                 pos = (9,1),
                 flag=wx.TOP|wx.LEFT|wx.BOTTOM|wx.EXPAND, border=5)
-        sizer.Add(self.btn_browse_m6,
-                pos = (9,2),
-                flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=5)
 
         sizer.Add(self.btn_save,
                 pos = (10,1),
@@ -136,78 +116,38 @@ class ConfigEditor(wx.MiniFrame):
         panel.SetSizer(sizer)
 
 
-class ConfigPresenter(ConfigEditor):
+class ConfigPresenter(ConfigView):
 
     def __init__(self, parent):
-        ConfigEditor.__init__(self, parent)
+        ConfigView.__init__(self, parent)
         self.parent = parent
 
-        self.btn_browse_db.Bind(wx.EVT_BUTTON, self.browse_db)
-        self.btn_browse_bt.Bind(wx.EVT_BUTTON, self.browse_bt)
-        self.btn_browse_pre.Bind(wx.EVT_BUTTON, self.browse_pre)
-        self.btn_browse_m5.Bind(wx.EVT_BUTTON, self.browse_m5)
-        self.btn_browse_m6.Bind(wx.EVT_BUTTON, self.browse_m6)
         self.btn_save.Bind(wx.EVT_BUTTON, self.save)
  
-        self.txt_db_path.SetValue(config.db_path)
-        self.txt_bt_path.SetValue(config.bt_path)
+        self.txt_db_path.SetPath(config.db_path)
+        self.txt_bt_path.SetPath(config.bt_path)
         self.txt_list_shops.SetValue(','.join(config.list_shops)) 
         self.txt_default_shop.SetValue(config.default_shop) 
         self.chk_show_rollovers.SetValue(config.show_rollovers) 
-        self.txt_previewer_path.SetValue(config.previewer_path)
-        self.txt_merger5_path.SetValue(config.merger5_path)
-        self.txt_merger6_path.SetValue(config.merger6_path)
-
-    def browse_db(self, evt):
-        dialog = wx.FileDialog(None, 
-                message = 'Data', style = wx.OPEN) 
-        if dialog.ShowModal() == wx.ID_OK:
-            new_path = dialog.GetPath()
-            self.txt_db_path.SetLabel(new_path)
-
-    def browse_pre(self, evt):
-        dialog = wx.FileDialog(None, 
-                message = 'Previewer.exe', style = wx.OPEN) 
-        if dialog.ShowModal() == wx.ID_OK:
-            new_path = dialog.GetPath()
-            self.txt_previewer_path.SetLabel(new_path)
-
-    def browse_m5(self, evt):
-        dialog = wx.FileDialog(None, 
-                message = 'Merger5 .exe file', style = wx.OPEN) 
-        if dialog.ShowModal() == wx.ID_OK:
-            new_path = dialog.GetPath()
-            self.txt_merger5_path.SetLabel(new_path)
-
-    def browse_m6(self, evt):
-        dialog = wx.FileDialog(None, 
-                message = 'Merger6 .exe file', style = wx.OPEN) 
-        if dialog.ShowModal() == wx.ID_OK:
-            new_path = dialog.GetPath()
-            self.txt_merger6_path.SetLabel(new_path)
-
-    def browse_bt(self, evt):
-        dialog = wx.DirDialog(None, 
-                message = 'Board Train Folder', style = wx.OPEN) 
-        if dialog.ShowModal() == wx.ID_OK:
-            new_path = dialog.GetPath()
-            self.txt_bt_path.SetLabel(new_path)
+        self.txt_previewer_path.SetPath(config.previewer_path)
+        self.txt_merger5_path.SetPath(config.merger5_path)
+        self.txt_merger6_path.SetPath(config.merger6_path)
 
     def save(self, evt):
-        config.Write('db_path', self.txt_db_path.GetValue())
-        config.Write('bt_path', self.txt_bt_path.GetValue())
+        config.Write('db_path', self.txt_db_path.GetPath())
+        config.Write('bt_path', self.txt_bt_path.GetPath())
         config.Write('list_shops', self.txt_list_shops.GetValue())
         config.Write('default_shop', self.txt_default_shop.GetValue())
         config.WriteBool('show_rollovers', self.chk_show_rollovers.GetValue())
-        config.Write('previewer_path', self.txt_previewer_path.GetValue())
-        config.Write('merger5_path', self.txt_merger5_path.GetValue())
-        config.Write('merger6_path', self.txt_merger6_path.GetValue())
+        config.Write('previewer_path', self.txt_previewer_path.GetPath())
+        config.Write('merger5_path', self.txt_merger5_path.GetPath())
+        config.Write('merger6_path', self.txt_merger6_path.GetPath())
 
         self.Destroy()
         self.parent.Destroy()
 
 
-class App(wx.App):
+class TestsApp(wx.App):
     def OnInit(self):
         frame = ConfigPresenter(None)
         frame.Show(True)
@@ -216,5 +156,5 @@ class App(wx.App):
 
 if __name__ == '__main__':
     config = Config()
-    app = App(False)
+    app = TestApp(False)
     app.MainLoop()
