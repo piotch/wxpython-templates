@@ -5,8 +5,9 @@ from wx.lib.pubsub import pub
 
 class Config(wx.Config):
 
-    def __init__(self):
-        wx.Config.__init__(self, 'BoardTrain2')
+    def __init__(self, app = None):
+        app = app or 'BoardTrain2'
+        wx.Config.__init__(self, app)
 
         self.db_path = self.Read('db_path', 'data/UTL5_data.mdb')
         self.bt_path = self.Read('bt_path', 
@@ -144,10 +145,12 @@ class ConfigPresenter(ConfigView):
         config.Write('merger6_path', self.txt_merger6_path.GetPath())
 
         self.Destroy()
-        self.parent.Destroy()
+        try:
+            self.parent.Destroy()
+        except:
+            pass
 
-
-class TestsApp(wx.App):
+class TestApp(wx.App):
     def OnInit(self):
         frame = ConfigPresenter(None)
         frame.Show(True)
@@ -155,6 +158,6 @@ class TestsApp(wx.App):
 
 
 if __name__ == '__main__':
-    config = Config()
+    config = Config('utlconfig-test')
     app = TestApp(False)
     app.MainLoop()
