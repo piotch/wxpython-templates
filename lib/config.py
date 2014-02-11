@@ -124,7 +124,10 @@ class ConfigPresenter(ConfigView):
         self.parent = parent
 
         self.btn_save.Bind(wx.EVT_BUTTON, self.save)
- 
+
+        self.set_config()
+
+    def set_config(self):
         self.txt_db_path.SetPath(config.db_path)
         self.txt_bt_path.SetPath(config.bt_path)
         self.txt_list_shops.SetValue(','.join(config.list_shops)) 
