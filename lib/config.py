@@ -19,8 +19,8 @@ class Config(wx.Config):
 class ConfigView(wx.MiniFrame):
 
     def __init__(self, parent):
-        wx.MiniFrame.__init__(self, parent, -1,
-                'Preferences', style=wx.DEFAULT_FRAME_STYLE)
+        wx.MiniFrame.__init__(self, parent, -1, 'Preferences', 
+                style=wx.DEFAULT_FRAME_STYLE)
         
         self.SetSize((800,500))
         panel = wx.Panel(self)
@@ -50,64 +50,31 @@ class ConfigView(wx.MiniFrame):
 
         sizer = wx.GridBagSizer(10, 2)
         sizer.AddGrowableCol(1)
-        
-        sizer.Add(lbl_path_caution,
-                pos = (0,1),
-                flag=wx.TOP|wx.LEFT, border=5)
-        sizer.Add(lbl_db_path,
-                pos = (1,0),
-                flag=wx.TOP|wx.LEFT|wx.BOTTOM|wx.ALIGN_RIGHT, border=5)
-        sizer.Add(self.txt_db_path,
-                pos = (1,1),
-                flag=wx.TOP|wx.LEFT|wx.BOTTOM|wx.EXPAND, border=5)
-        sizer.Add(lbl_bt_path,
-                pos = (2,0),
-                flag=wx.TOP|wx.LEFT|wx.BOTTOM|wx.ALIGN_RIGHT, border=5)
-        sizer.Add(self.txt_bt_path,
-                pos = (2,1),
-                flag=wx.TOP|wx.LEFT|wx.BOTTOM|wx.EXPAND, border=5)
-        sizer.Add(lbl_list_shops,
-                pos = (3,0),
-                flag=wx.TOP|wx.LEFT|wx.BOTTOM|wx.ALIGN_RIGHT, border=5)
-        sizer.Add(self.txt_list_shops,
-                pos = (3,1),
-                flag=wx.TOP|wx.LEFT|wx.BOTTOM|wx.EXPAND, border=5)
-        sizer.Add(lbl_default_shop,
-                pos = (4,0),
-                flag=wx.TOP|wx.LEFT|wx.BOTTOM|wx.ALIGN_RIGHT, border=5)
-        sizer.Add(self.txt_default_shop,
-                pos = (4,1),
-                flag=wx.TOP|wx.LEFT|wx.BOTTOM|wx.EXPAND, border=5)
-        sizer.Add(lbl_show_rollovers,
-                pos = (5,0),
-                flag=wx.TOP|wx.LEFT|wx.BOTTOM|wx.ALIGN_RIGHT, border=5)
-        sizer.Add(self.chk_show_rollovers,
-                pos = (5,1),
-                flag=wx.TOP|wx.LEFT|wx.BOTTOM|wx.EXPAND, border=5)
-        sizer.Add(wx.StaticText(panel, label = "Local paths"),
-                pos = (6,1),
-                flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=5)
-        sizer.Add(lbl_previewer_path,
-                pos = (7,0),
-                flag=wx.TOP|wx.LEFT|wx.BOTTOM|wx.ALIGN_RIGHT, border=5)
-        sizer.Add(self.txt_previewer_path,
-                pos = (7,1),
-                flag=wx.TOP|wx.LEFT|wx.BOTTOM|wx.EXPAND, border=5)
-        sizer.Add(lbl_merger5_path,
-                pos = (8,0),
-                flag=wx.TOP|wx.LEFT|wx.BOTTOM|wx.ALIGN_RIGHT|wx.ALIGN_RIGHT, border=5)
-        sizer.Add(self.txt_merger5_path,
-                pos = (8,1),
-                flag=wx.TOP|wx.LEFT|wx.BOTTOM|wx.EXPAND, border=5)
-        sizer.Add(lbl_merger6_path,
-                pos = (9,0),
-                flag=wx.TOP|wx.LEFT|wx.BOTTOM|wx.ALIGN_RIGHT, border=5)
-        sizer.Add(self.txt_merger6_path,
-                pos = (9,1),
-                flag=wx.TOP|wx.LEFT|wx.BOTTOM|wx.EXPAND, border=5)
 
-        sizer.Add(self.btn_save,
-                pos = (10,1),
+        flag_lbl = wx.TOP|wx.LEFT|wx.BOTTOM|wx.ALIGN_RIGHT
+        flag_txt = wx.TOP|wx.LEFT|wx.BOTTOM|wx.EXPAND
+        
+        sizer.Add(lbl_path_caution, pos = (0,1), flag=wx.TOP|wx.LEFT, border=5)
+        sizer.Add(lbl_db_path, pos = (1,0), flag= flag_lbl, border=5)
+        sizer.Add(self.txt_db_path, pos = (1,1), flag= flag_txt, border=5)
+        sizer.Add(lbl_bt_path, pos = (2,0), flag= flag_lbl, border=5)
+        sizer.Add(self.txt_bt_path, pos = (2,1), flag= flag_txt, border=5)
+        sizer.Add(lbl_list_shops, pos = (3,0), flag= flag_lbl, border=5)
+        sizer.Add(self.txt_list_shops, pos = (3,1), flag= flag_txt, border=5)
+        sizer.Add(lbl_default_shop, pos = (4,0), flag= flag_lbl, border=5)
+        sizer.Add(self.txt_default_shop, pos = (4,1), flag= flag_txt, border=5)
+        sizer.Add(lbl_show_rollovers, pos = (5,0), flag= flag_lbl, border=5)
+        sizer.Add(self.chk_show_rollovers, pos = (5,1), flag= flag_txt, border=5)
+        sizer.Add(wx.StaticText(panel, label = "Local paths"), pos = (6,1), 
+                flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=5)
+        sizer.Add(lbl_previewer_path, pos = (7,0), flag=flag_lbl, border=5)
+        sizer.Add(self.txt_previewer_path, pos = (7,1), flag= flag_txt, border=5)
+        sizer.Add(lbl_merger5_path, pos = (8,0), flag=flag_lbl, border=5)
+        sizer.Add(self.txt_merger5_path, pos = (8,1), flag= flag_txt, border=5)
+        sizer.Add(lbl_merger6_path, pos = (9,0), flag= flag_lbl, border=5)
+        sizer.Add(self.txt_merger6_path, pos = (9,1), flag= flag_txt, border=5)
+
+        sizer.Add(self.btn_save, pos = (10,1),
                 flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=5)
 
         panel.SetSizer(sizer)
@@ -117,13 +84,13 @@ class ConfigPresenter(ConfigView):
 
     def __init__(self, parent):
         ConfigView.__init__(self, parent)
-        self.parent = parent
+        self.parent = parent # destroyed on save and quit
 
         self.btn_save.Bind(wx.EVT_BUTTON, self.save)
 
-        self.set_settings()
+        self.display()
 
-    def set_settings(self):
+    def display(self):
         self.txt_db_path.SetPath(settings.db_path)
         self.txt_bt_path.SetPath(settings.bt_path)
         self.txt_list_shops.SetValue(','.join(settings.list_shops)) 
@@ -149,6 +116,7 @@ class ConfigPresenter(ConfigView):
         except:
             pass
 
+
 class TestApp(wx.App):
     def OnInit(self):
         frame = ConfigPresenter(None)
@@ -160,6 +128,5 @@ if __name__ == '__main__':
     settings = Config('utlsettings-test')
     app = TestApp(False)
     app.MainLoop()
-
 else:
     settings = Config()
