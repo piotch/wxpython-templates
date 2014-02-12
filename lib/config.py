@@ -48,7 +48,7 @@ class ConfigView(wx.MiniFrame):
 
         self.btn_save = wx.Button(panel, label = 'Save and Quit')
 
-        sizer = wx.GridBagSizer(10, 3)
+        sizer = wx.GridBagSizer(10, 2)
         sizer.AddGrowableCol(1)
         
         sizer.Add(lbl_path_caution,
@@ -121,27 +121,27 @@ class ConfigPresenter(ConfigView):
 
         self.btn_save.Bind(wx.EVT_BUTTON, self.save)
 
-        self.set_config()
+        self.set_settings()
 
-    def set_config(self):
-        self.txt_db_path.SetPath(config.db_path)
-        self.txt_bt_path.SetPath(config.bt_path)
-        self.txt_list_shops.SetValue(','.join(config.list_shops)) 
-        self.txt_default_shop.SetValue(config.default_shop) 
-        self.chk_show_rollovers.SetValue(config.show_rollovers) 
-        self.txt_previewer_path.SetPath(config.previewer_path)
-        self.txt_merger5_path.SetPath(config.merger5_path)
-        self.txt_merger6_path.SetPath(config.merger6_path)
+    def set_settings(self):
+        self.txt_db_path.SetPath(settings.db_path)
+        self.txt_bt_path.SetPath(settings.bt_path)
+        self.txt_list_shops.SetValue(','.join(settings.list_shops)) 
+        self.txt_default_shop.SetValue(settings.default_shop) 
+        self.chk_show_rollovers.SetValue(settings.show_rollovers) 
+        self.txt_previewer_path.SetPath(settings.previewer_path)
+        self.txt_merger5_path.SetPath(settings.merger5_path)
+        self.txt_merger6_path.SetPath(settings.merger6_path)
 
     def save(self, evt):
-        config.Write('db_path', self.txt_db_path.GetPath())
-        config.Write('bt_path', self.txt_bt_path.GetPath())
-        config.Write('list_shops', self.txt_list_shops.GetValue())
-        config.Write('default_shop', self.txt_default_shop.GetValue())
-        config.WriteBool('show_rollovers', self.chk_show_rollovers.GetValue())
-        config.Write('previewer_path', self.txt_previewer_path.GetPath())
-        config.Write('merger5_path', self.txt_merger5_path.GetPath())
-        config.Write('merger6_path', self.txt_merger6_path.GetPath())
+        settings.Write('db_path', self.txt_db_path.GetPath())
+        settings.Write('bt_path', self.txt_bt_path.GetPath())
+        settings.Write('list_shops', self.txt_list_shops.GetValue())
+        settings.Write('default_shop', self.txt_default_shop.GetValue())
+        settings.WriteBool('show_rollovers', self.chk_show_rollovers.GetValue())
+        settings.Write('previewer_path', self.txt_previewer_path.GetPath())
+        settings.Write('merger5_path', self.txt_merger5_path.GetPath())
+        settings.Write('merger6_path', self.txt_merger6_path.GetPath())
 
         self.Destroy()
         try:
@@ -157,6 +157,9 @@ class TestApp(wx.App):
 
 
 if __name__ == '__main__':
-    config = Config('utlconfig-test')
+    settings = Config('utlsettings-test')
     app = TestApp(False)
     app.MainLoop()
+
+else:
+    settings = Config()
