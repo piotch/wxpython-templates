@@ -4,7 +4,7 @@ from presenters import NAME, VERSION
 name = NAME + VERSION
 archive_name = name + '.zip'
 
-f.env.hosts = ['pierre3@host.host']
+f.env.hosts = ['user@host.host']
 
 def build_exe():
 	f.local('pyinstaller pyinstaller.spec')
@@ -24,7 +24,7 @@ def archive():
         root_dir = 'dist')
 
 def upload():
-    remote_folder = 'beytiskimu.net/utl/%s/' % NAME
+    remote_folder = 'host.host/utl/%s/' % NAME
     f.put(archive_name, remote_folder)
     f.put('doc/index.html', remote_folder)
 
